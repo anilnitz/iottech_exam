@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Exam_term;
 use App\Exam_type;
+use App\Exam_create;
+use App\Exam_project_assessment_type;
+use App\Exam_project_assessment;
 
 class AdminController extends Controller
 {
@@ -160,6 +163,221 @@ class AdminController extends Controller
             File::delete($urlss);*/
             $this->message('success', "Deleted Successfully", $res);
         }
+    }
+    public function exam()
+    {
+        $type=Exam_type::all();
+        return view('Admin.exam',compact('type'));
+    }
+    public function add_exam(Request $request)
+    {
+        $exam=new Exam_create();
+        $exam->exam_type_id=$request->type_id;
+        $exam->exam_name=$request->exam_name;
+        $exam->exam_description=$request->exam_des;
+        $exam->from_exam=$request->from_exam;
+        $exam->to_exam=$request->to_exam;
+        $exam->current_date=$request->current_date;
+        $res=$exam->save();
+        if (!$res) {
+            $this->message('error', '', $res);
+        } else {
+            $this->message('success', 'Added SuccessFully', $res);
+        }
+    }
+    public function exam_list()
+    {
+        $res=Exam_create::with(['exam_type'])->get();
+        $i = 1;
+        foreach ($res as $key => &$value) {
+            $value->sr_no = $i;
+            $value->action = "<a exam_id='" . $value->id . "' class='pr-2 pointer view-exam' data-toggle='modal' data-target='#view-exam'><i class='fa fa-eye'></i></a>"
+                . "<a exam_id='" . $value->id . "' class='pr-2 pointer edit-exam' data-toggle='modal' data-target='#edit-exam'><i class='fa fa-edit'></i></a>"
+                . "<a exam_id='" . $value->id . "' class='pointer delete_exam' @csrf><i class='fa fa-trash text-danger'></i></a>";
+            $i++;
+        }
+        $this->message('success', '', $res);
+
+    }
+    public function exam_delete(Request $request)
+    {
+        $value=Exam_create::find($request->id);
+        $res=$value->delete();
+        if (!$res)
+        {
+            $this->message('error', "Not Deleted" ,$res);
+        }
+        else
+        {
+            $this->message('success', "Deleted Successfully", $res);
+        }
+
+    }
+    public function get_exam_data(Request $request)
+    {
+        $res = Exam_create::with(['exam_type'])->where('exam_creates.id',$request->id)->get();
+        if (!$res) {
+            $this->message('error', '', $res);
+        } else {
+            $this->message('success', '', $res);
+        }
+    }
+    public function exam_update(Request $req)
+    {
+       $val= Exam_create::find($req->id);
+       $val->exam_type_id=$req->type_id;
+       $val->exam_name=$req->exam_name;
+       $val->exam_description=$req->exam_des;
+       $val->from_exam=$req->from_date;
+       $val->to_exam=$req->to_date;
+       $val->current_date=$req->update_date;
+       $res=$val->save();
+       if (!$res) {
+            $this->message('error', '', $res);
+        } else {
+            $this->message('success', 'Update SuccessFully', $res);
+        }
+
+    }
+    public function project_assessment_type()
+    {
+        return view('Admin.projectAssessmentType');
+    }
+    public function add_project_assessment_type(Request $request)
+    {
+        $project_type=new Exam_project_assessment_type();
+        $project_type->type_name=$request->type_name;
+        $project_type->description=$request->type_des;
+        $project_type->current_date=$request->type_date;
+        $res=$project_type->save();
+        if (!$res) {
+            $this->message('error', '', $res);
+        } else {
+            $this->message('success', 'Added SuccessFully', $res);
+        }
+    }
+    public function project_assessment_type_list()
+    {
+        $res=Exam_project_assessment_type::all();
+        $i = 1;
+        foreach ($res as $key => &$value) {
+            $value->sr_no = $i;
+            $value->action = "<a project_type_id='" . $value->id . "' class='pr-2 pointer view-projecttype' data-toggle='modal' data-target='#view-projecttype'><i class='fa fa-eye'></i></a>"
+                . "<a project_type_id='" . $value->id . "' class='pr-2 pointer edit-projecttype' data-toggle='modal' data-target='#edit-projecttype'><i class='fa fa-edit'></i></a>"
+                . "<a project_type_id='" . $value->id . "' class='pointer delete_project_type' @csrf><i class='fa fa-trash text-danger'></i></a>";
+            $i++;
+        }
+        $this->message('success', '', $res);
+    }
+    public function get_project_assessment_type(Request $request)
+    {
+        $res = Exam_project_assessment_type::where('exam_project_assessment_types.id',$request->id)->get();
+        if (!$res) {
+            $this->message('error', '', $res);
+        } else {
+            $this->message('success', '', $res);
+        }
+    }
+    public function project_assessment_type_update(Request $req)
+    {
+       $val= Exam_project_assessment_type::find($req->id);
+       $val->type_name=$req->type_name;
+       $val->description=$req->type_des;
+       $val->current_date=$req->type_date;
+       $res=$val->save();
+       if (!$res) {
+            $this->message('error', '', $res);
+        } else {
+            $this->message('success', 'Update SuccessFully', $res);
+        }
+
+    }
+    public function project_assessment_type_delete(Request $request)
+    {
+        $value=Exam_project_assessment_type::find($request->id);
+        $res=$value->delete();
+        if (!$res)
+        {
+            $this->message('error', "Not Deleted" ,$res);
+        }
+        else
+        {
+            $this->message('success', "Deleted Successfully", $res);
+        }
+    }
+    public function project_assessment()
+    {
+        $type=Exam_project_assessment_type::all();
+        return view('Admin.project_Assessment',compact('type'));
+    }
+    public function add_project_assessment(Request $request)
+    {
+        $project=new Exam_project_assessment();
+        $project->assessment_types_id=$request->type_id;
+        $project->project_name=$request->project_name;
+        $project->project_description=$request->project_des;
+        $project->from_project=$request->from_project;
+        $project->to_project=$request->to_project;
+        $project->current_date=$request->project_date;
+        $res=$project->save();
+        if (!$res) {
+            $this->message('error', '', $res);
+        } else {
+            $this->message('success', 'Added SuccessFully', $res);
+        }
+    }
+    public function project_assessment_list()
+    {
+        $res=Exam_project_assessment::with(['project_assessment_type'])->get();
+        $i = 1;
+        foreach ($res as $key => &$value) {
+            $value->sr_no = $i;
+            $value->action = "<a assessment_id='" . $value->id . "' class='pr-2 pointer view-assessment' data-toggle='modal' data-target='#view-assessment'><i class='fa fa-eye'></i></a>"
+                . "<a assessment_id='" . $value->id . "' class='pr-2 pointer edit-assessment' data-toggle='modal' data-target='#edit-assessment'><i class='fa fa-edit'></i></a>"
+                . "<a assessment_id='" . $value->id . "' class='pointer delete_assessment' @csrf><i class='fa fa-trash text-danger'></i></a>";
+            $i++;
+        }
+        $this->message('success', '', $res);
+    }
+    public function get_project_assessment(Request $request)
+    {
+        $res = Exam_project_assessment::with(['project_assessment_type'])->where('exam_project_assessments.id',$request->id)->get();
+        if (!$res) {
+            $this->message('error', '', $res);
+        } else {
+            $this->message('success', '', $res);
+        }
+    }
+    public function project_assessment_update(Request $req)
+    {
+       $val= Exam_project_assessment::find($req->id);
+       $val->assessment_types_id=$req->type_id;
+       $val->project_name=$req->project_name;
+       $val->project_description=$req->project_des;
+       $val->from_project=$req->from_project;
+       $val->to_project=$req->to_project;
+       $val->current_date=$req->project_date;
+       $res=$val->save();
+       if (!$res) {
+            $this->message('error', '', $res);
+        } else {
+            $this->message('success', 'Update SuccessFully', $res);
+        }
+
+    }
+    public function project_assessment_delete(Request $request)
+    {
+        $value=Exam_project_assessment::find($request->id);
+        $res=$value->delete();
+        if (!$res)
+        {
+            $this->message('error', "Not Deleted" ,$res);
+        }
+        else
+        {
+            $this->message('success', "Deleted Successfully", $res);
+        }
+
     }
 
 }

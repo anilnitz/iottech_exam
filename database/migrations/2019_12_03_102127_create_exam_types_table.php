@@ -13,14 +13,23 @@ class CreateExamTypesTable extends Migration
      */
     public function up()
     {
+        Schema::create('exam_terms', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('term_name');
+            $table->string('description');
+            $table->string('current_date');
+            $table->timestamps();
+        });
         Schema::create('exam_types', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('term_id')->unsigned();
+            $table->foreign('term_id')->references('id')->on('exam_terms');
             $table->string('type_name')->nullable();
             $table->string('description')->nullable();
             $table->string('current_date')->nullable();
             $table->timestamps();
         });
+        
     }
 
     /**

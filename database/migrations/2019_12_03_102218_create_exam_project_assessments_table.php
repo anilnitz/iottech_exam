@@ -13,11 +13,22 @@ class CreateExamProjectAssessmentsTable extends Migration
      */
     public function up()
     {
+         Schema::create('exam_project_assessment_types', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('type_name');
+            $table->string('description');
+            $table->string('current_date');
+            $table->timestamps();
+        });
         Schema::create('exam_project_assessments', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('assessment_type');
-            $table->string('exam_description');
-            $table->string('duration_period');
+            $table->integer('assessment_types_id')->unsigned();
+            $table->foreign('assessment_types_id')->references('id')->on('exam_project_assessment_types')->nullable();
+            $table->string('project_name')->nullable();
+            $table->string('project_description')->nullable();
+            $table->string('from_project')->nullable();
+            $table->string('to_project')->nullable();
+            $table->string('current_date')->nullable();
             $table->timestamps();
         });
     }

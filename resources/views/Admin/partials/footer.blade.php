@@ -252,6 +252,9 @@
 <script src="dist/js/demo.js"></script>
 <script src="dist/js/custom1.js"></script>
 <script>
+   $(function(){
+        $('a.treeview-item.active').closest( ".treeview" ).addClass('menu-open');
+    })
 var APP_URL = {!! json_encode(url('/')) !!}
 </script>
 

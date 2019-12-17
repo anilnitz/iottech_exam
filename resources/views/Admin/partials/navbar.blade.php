@@ -273,21 +273,21 @@
           <ul class="treeview-menu">
             <li><a href="{{route('terms')}}"><i class="fa fa-circle-o"></i>Terms</a></li>
             <li><a href="{{route('exam_type')}}"><i class="fa fa-circle-o"></i> Exam Type</a></li>
-            <li><a href="#"><i class="fa fa-circle-o"></i>Examination Add</a></li>
-            <li><a href="#"><i class="fa fa-circle-o"></i>Project Assignment Type</a></li>
-            <li><a href="#"><i class="fa fa-circle-o"></i>Project Assignment</a></li>
+            <li><a href="{{route('exam')}}"><i class="fa fa-circle-o"></i>Examination Add</a></li>
+            <li><a href="{{route('project_assessment_type')}}"><i class="fa fa-circle-o"></i>Project Assignment Type</a></li>
+            <li><a href="{{route('project_assessment')}}"><i class="fa fa-circle-o"></i>Project Assignment</a></li>
 
           </ul>
         </li>
         <li>
-          <a href="pages/widgets.html">
+          <a href="#">
             <i class="fa fa-book"></i> <span>Widgets</span>
             <span class="pull-right-container">
               <small class="label pull-right bg-green">new</small>
             </span>
           </a>
         </li>
-        <li><a href="https://adminlte.io/docs"><i class="fa fa-book"></i> <span>Documentation</span></a></li>
+        <li><a href="#"><i class="fa fa-book"></i> <span>Documentation</span></a></li>
         <!-- <li class="header">LABELS</li>
         <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Important</span></a></li>
         <li><a href="#"><i class="fa fa-circle-o text-yellow"></i> <span>Warning</span></a></li>

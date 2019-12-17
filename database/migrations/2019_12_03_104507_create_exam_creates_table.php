@@ -15,10 +15,13 @@ class CreateExamCreatesTable extends Migration
     {
         Schema::create('exam_creates', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('exam_term_id');
-            $table->string('exam_type_id');
+            $table->integer('exam_type_id')->unsigned();
+            $table->foreign('exam_type_id')->references('id')->on('exam_types');
+            $table->string('exam_name');
             $table->string('exam_description');
-            $table->string('exam_duration');
+            $table->string('from_exam');
+            $table->string('to_exam');
+            $table->string('current_date');
             $table->timestamps();
         });
     }
